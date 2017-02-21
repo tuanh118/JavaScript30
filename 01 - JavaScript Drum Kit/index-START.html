@@ -57,7 +57,50 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
+<script type="text/javascript">
+  function onkeydownGen(audioMap, visualMap) {
+    return function(e) {
+      var key = e.keyCode.toString();
+
+      // Play the sound
+      if (audioMap[key]) {
+        audioMap[key].play();
+      }
+
+      // Change the visual
+      if (visualMap[key]) {
+        visualMap[key].className = "key playing";
+      }
+    }
+  }
+
+  function onkeyupGen(visualMap) {
+    return function(e) {
+      var key = e.keyCode.toString();
+
+      // Revert the visual
+      if (visualMap[key]) {
+        visualMap[key].className = "key";
+      }
+    }
+  }
+
+  // Prepare lists of audios and visuals as hash maps
+  var audioMap = {};
+  var audioElements = Array.from(document.getElementsByTagName("audio"));
+  audioElements.forEach(function(element) {
+    audioMap[element.dataset.key] = element;
+  });
+
+  var visualMap = {};
+  var visualElements = Array.from(document.getElementsByClassName("key"));
+  visualElements.forEach(function(element) {
+    visualMap[element.dataset.key] = element;
+  });
+
+  // Assign event listeners
+  document.onkeydown = onkeydownGen(audioMap, visualMap);
+  document.onkeyup = onkeyupGen(visualMap);
 
 </script>
 
